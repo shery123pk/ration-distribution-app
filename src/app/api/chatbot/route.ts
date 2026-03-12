@@ -37,11 +37,13 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, reply });
   } catch (err) {
-    console.error("POST /api/chatbot error:", err);
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("POST /api/chatbot error:", errorMessage);
     return NextResponse.json(
       {
         success: false,
         reply: "Sorry, I'm having trouble right now. Please try again later.",
+        debug: errorMessage,
       },
       { status: 500 }
     );
