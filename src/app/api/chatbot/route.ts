@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
       {
         success: false,
         reply: "Sorry, I'm having trouble right now. Please try again later.",
-        debug: errorMessage,
       },
       { status: 500 }
     );
