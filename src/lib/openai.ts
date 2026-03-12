@@ -1,17 +1,11 @@
-import OpenAI from "openai";
 import type { ChatMessage } from "./types";
 
 // ============================================
 // OpenAI integration for the donor chatbot
-// Answers questions about donations, distribution status, and ration tracking
+// Uses direct fetch API for maximum compatibility with Vercel serverless
 // ============================================
 
-// Lazy-initialize the client so the app builds even without the API key
-function getClient() {
-  return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY ?? "",
-  });
-}
+const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
 /** System prompt that gives the chatbot context about Jaan Group */
 const SYSTEM_PROMPT = `You are a helpful assistant for Jaan Group, a charity organization based in Karachi, Pakistan.
@@ -30,7 +24,7 @@ If you don't have specific data about a donor's distribution, suggest they check
 
 /**
  * Send a chat message to OpenAI and get a response.
- * Maintains conversation history for context.
+ * Uses direct fetch for Vercel serverless compatibility.
  */
 export async function chatWithDonor(
   messages: ChatMessage[],
@@ -40,7 +34,6 @@ export async function chatWithDonor(
     { role: "system", content: SYSTEM_PROMPT },
   ];
 
-  // If we have donor-specific context (e.g. their donation history), inject it
   if (donorContext) {
     systemMessages.push({
       role: "system",
@@ -48,12 +41,25 @@ export async function chatWithDonor(
     });
   }
 
-  const response = await getClient().chat.completions.create({
-    model: "gpt-4o-mini", // Cost-effective for chat — upgrade to gpt-4o if needed
-    messages: [...systemMessages, ...messages],
-    max_tokens: 500,
-    temperature: 0.7,
+  const response = await fetch(OPENAI_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [...systemMessages, ...messages],
+      max_tokens: 500,
+      temperature: 0.7,
+    }),
   });
 
-  return response.choices[0]?.message?.content ?? "I'm sorry, I couldn't process that request.";
+  if (!response.ok) {
+    const errBody = await response.text();
+    throw new Error(`OpenAI API error (${response.status}): ${errBody}`);
+  }
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content ?? "I'm sorry, I couldn't process that request.";
 }
