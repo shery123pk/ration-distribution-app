@@ -8,9 +8,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Jaan Group — Ration Distribution",
+  title: "JAAN GROUP — Transparent Charity System",
   description:
-    "Donate Zakat, Fitra & Sadaqah to provide ration packages to deserving families in Karachi. Track your donations with verified proof.",
+    "Donate Zakat, Fitra & Sadaqah to provide ration packages to deserving families worldwide. Transparent tracking with verified proof. Sadaqah serves all communities.",
 };
 
 export default function RootLayout({

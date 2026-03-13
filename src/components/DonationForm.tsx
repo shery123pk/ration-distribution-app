@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, Loader2, CheckCircle2 } from "lucide-react";
+import { Heart, Loader2, CheckCircle2, Landmark, Phone } from "lucide-react";
 import RationSelector from "./RationSelector";
 import type { DonationType, SelectedItem } from "@/lib/types";
 
@@ -10,9 +10,9 @@ import type { DonationType, SelectedItem } from "@/lib/types";
 // ============================================
 
 const DONATION_TYPES: { value: DonationType; label: string; description: string }[] = [
-  { value: "zakat", label: "Zakat", description: "Obligatory 2.5% charity on savings" },
-  { value: "fitra", label: "Fitra", description: "Given before Eid prayer for purification" },
-  { value: "sadaqah", label: "Sadaqah", description: "Voluntary charity for any amount" },
+  { value: "zakat", label: "Zakat", description: "Obligatory 2.5% charity — for Muslim beneficiaries" },
+  { value: "fitra", label: "Fitra", description: "Given before Eid prayer — for Muslim beneficiaries" },
+  { value: "sadaqah", label: "Sadaqah", description: "Voluntary charity — serves all communities" },
 ];
 
 export default function DonationForm() {
@@ -176,6 +176,37 @@ export default function DonationForm() {
               placeholder="Dua request or special note"
             />
           </div>
+        </div>
+      </div>
+
+      {/* Bank Transfer Details */}
+      <div className="card border-brand-200 bg-gradient-to-br from-brand-50 to-white">
+        <h3 className="mb-4 flex items-center gap-2">
+          <Landmark className="h-5 w-5 text-brand-600" />
+          Bank Transfer Details
+        </h3>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <p className="text-xs font-medium uppercase text-gray-500">Account Holder</p>
+            <p className="font-bold text-gray-900">SHARMEEN ASIF</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium uppercase text-gray-500">Bank</p>
+            <p className="font-bold text-gray-900">Meezan Bank — Hub River Road</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium uppercase text-gray-500">Account Number</p>
+            <p className="font-mono font-bold text-brand-700">01610105512619</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium uppercase text-gray-500">IBAN</p>
+            <p className="font-mono text-sm font-bold text-brand-700 break-all">PK70MEZN0001610105512619</p>
+          </div>
+        </div>
+        <div className="mt-4 flex items-center gap-2 rounded-lg bg-brand-100/50 p-3 text-sm text-brand-800">
+          <Phone className="h-4 w-4 flex-shrink-0" />
+          After transfer, share receipt via WhatsApp/Call:
+          <a href="tel:+923302541908" className="font-semibold underline">+92 330 2541908</a>
         </div>
       </div>
 
